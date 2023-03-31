@@ -116,10 +116,48 @@ struct Map {
   }
 };
 
-struct Coord;
-class Creature;
-class Ghost;
-class Player;
+struct Coord {
+  size_t coordinate = 0;
+
+  size_t GetTile() const;
+  static Coord GetCoord(size_t tile);
+  std::pair<size_t, size_t> GetDisplayCoord();
+
+  void diff_i(long long diff);
+  void diff_j(long long diff);
+
+  size_t GetI() const;
+  size_t GetJ() const;
+
+  void SetI(long long i) { diff_i(i - GetI()); }
+  void SetJ(long long j) { diff_j(j - GetJ()); }
+};
+class Creature {
+ public:
+  Coord coord;
+  Direction dir = Direction::None;
+  size_t speed = GameCoreConstants::def_speed;
+
+  void GenNextStep(const Direction& new_dir);
+};
+class Ghost: public Creature {
+ public:
+  using Creature::coord;
+  size_t ticks_to_follow = 0;
+  Colours colour = Colours::Red;
+
+  void ThinkAboutLife(size_t i);
+};
+class Player: public Creature {
+ public:
+  size_t coins = 0;
+  size_t score = 0;
+  size_t lifes = 3; // не обязательно
+  PlayerState state = PlayerState::usual;
+  size_t ticks_for_state = 0;
+
+  void CheckCollisions();
+};
 namespace GameInfo {
   Map map;
   std::vector<Player> players;
@@ -138,154 +176,114 @@ struct GameInitInfo {
   std::vector<size_t> init_ghosts;
 };
 
-struct Coord {
-  size_t coordinate = 0;
+size_t Coord::GetTile() const {
+  using namespace GameInfo;
+  using namespace GameCoreConstants;
+  return ((coordinate / (map.jsize * tile_size)) / (tile_size)) * map.jsize +
+         (coordinate % (map.jsize * tile_size)) / tile_size;
+}
+Coord Coord::GetCoord(size_t tile) {
+  using namespace GameInfo;
+  using namespace GameCoreConstants;
+  size_t i = tile / map.jsize;
+  size_t j = tile % map.jsize;
+  Coord base;
+  base.diff_i(tile_size / 2 + i * tile_size);
+  base.diff_j(tile_size / 2 + j * tile_size);
+  return base;
+}
+std::pair<size_t, size_t> Coord::GetDisplayCoord() {
+  using namespace GameInfo;
+  using namespace GameCoreConstants;
+  // returns (x, y), not (i, j)
+  return {coordinate % (map.jsize * tile_size), coordinate / (map.jsize * tile_size)};
+}
+void Coord::diff_i(long long diff) { coordinate += diff * GameInfo::map.jsize * GameCoreConstants::tile_size; }
+void Coord::diff_j(long long diff) { coordinate += diff; }
+size_t Coord::GetI() const { return coordinate / (GameInfo::map.jsize * GameCoreConstants::tile_size); }
+size_t Coord::GetJ() const { return coordinate % (GameInfo::map.jsize * GameCoreConstants::tile_size); }
 
-  Coord() {}
-  Coord(size_t init): coordinate(init) {}
-  Coord& operator=(const Coord& other) { coordinate = other.coordinate; return *this; }
-
-  size_t GetTile() const {
-    using namespace GameInfo;
-    using namespace GameCoreConstants;
-    return ((coordinate / (map.jsize * tile_size)) / (tile_size)) * map.jsize +
-           (coordinate % (map.jsize * tile_size)) / tile_size;
+void Creature::GenNextStep(const Direction& new_dir) {
+  using namespace GameInfo;
+  using namespace GameCoreConstants;
+  switch (new_dir) {
+    case (Direction::Up):
+      if (map.matrix[coord.GetTile()][0]) dir = new_dir;
+      break;
+    case (Direction::Right):
+      if (map.matrix[coord.GetTile()][1]) dir = new_dir;
+      break;
+    case (Direction::Down):
+      if (map.matrix[coord.GetTile()][2]) dir = new_dir;
+      break;
+    case (Direction::Left):
+      if (map.matrix[coord.GetTile()][3]) dir = new_dir;
+      break;
+    case (Direction::None):
+      break;
   }
-  static Coord GetCoord(size_t tile) {
-    using namespace GameInfo;
-    using namespace GameCoreConstants;
-    size_t i = tile / map.jsize;
-    size_t j = tile % map.jsize;
-    Coord base;
-    base.diff_i(tile_size / 2 + i * tile_size);
-    base.diff_j(tile_size / 2 + j * tile_size);
-    //D(base.coordinate);
-    return base;
+  size_t tile = coord.GetTile();
+  Coord other_coord = Coord::GetCoord(tile);
+  size_t i = other_coord.GetI();
+  size_t j = other_coord.GetJ();
+  size_t i_cur = coord.GetI();
+  size_t j_cur = coord.GetJ();
+  long long to_go = def_speed;
+  if (i != i_cur && (dir == Direction::Right || dir == Direction::Left)) {
+    size_t dist = i + i_cur - std::min(i, i_cur) * 2;
+    if (to_go < dist) {
+      if (i_cur < i) { coord.diff_i(to_go); return; }
+      coord.diff_i(-to_go); return;
+    }
+    coord.SetI(i);
+    to_go -= dist;
   }
-  std::pair<size_t, size_t> GetDisplayCoord() {
-    using namespace GameInfo;
-    using namespace GameCoreConstants;
-    // returns (x, y), not (i, j)
-    return {coordinate % (map.jsize * tile_size), coordinate / (map.jsize * tile_size)};
+  if (j != j_cur && (dir == Direction::Up || dir == Direction::Down)) {
+    size_t dist = j + j_cur - std::min(j, j_cur) * 2;
+    if (to_go < dist) {
+      if (j_cur < j) { coord.diff_j(to_go); return; }
+      coord.diff_j(-to_go); return;
+    }
+    coord.SetJ(j);
+    to_go -= dist;
   }
-
-  void diff_i(long long diff) { coordinate += diff * GameInfo::map.jsize * GameCoreConstants::tile_size; }
-  void diff_j(long long diff) { coordinate += diff; }
-
-  size_t GetI() const { return coordinate / (GameInfo::map.jsize * GameCoreConstants::tile_size); }
-  size_t GetJ() const { return coordinate % (GameInfo::map.jsize * GameCoreConstants::tile_size); }
-
-  void SetI(long long i) { diff_i(i - GetI()); }
-  void SetJ(long long j) { diff_j(j - GetJ()); }
-};
-
-class Creature {
- public:
-  // по дефолту наверное это рандомная из свободных клеток
-  Coord coord = 0;
-  Direction dir = Direction::None;
-  size_t speed = GameCoreConstants::def_speed;
-
-  void GenNextStep(const Direction& new_dir = Direction::None) {
-    using namespace GameInfo;
-    using namespace GameCoreConstants;
-    switch (new_dir) {
-      case (Direction::Up):
-        if (map.matrix[coord.GetTile()][0]) dir = new_dir;
-        break;
-      case (Direction::Right):
-        if (map.matrix[coord.GetTile()][1]) dir = new_dir;
-        break;
-      case (Direction::Down):
-        if (map.matrix[coord.GetTile()][2]) dir = new_dir;
-        break;
-      case (Direction::Left):
-        if (map.matrix[coord.GetTile()][3]) dir = new_dir;
-        break;
-      case (Direction::None):
-        break;
-    }
-    size_t tile = coord.GetTile();
-    Coord other_coord = Coord::GetCoord(tile);
-    size_t i = other_coord.GetI();
-    size_t j = other_coord.GetJ();
-    size_t i_cur = coord.GetI();
-    size_t j_cur = coord.GetJ();
-    long long to_go = def_speed;
-    if (i != i_cur && (dir == Direction::Right || dir == Direction::Left)) {
-      size_t dist = i + i_cur - std::min(i, i_cur) * 2;
-      if (to_go < dist) {
-        if (i_cur < i) { coord.diff_i(to_go); return; }
-        coord.diff_i(-to_go); return;
-      }
-      coord.SetI(i);
-      to_go -= dist;
-    }
-    if (j != j_cur && (dir == Direction::Up || dir == Direction::Down)) {
-      size_t dist = j + j_cur - std::min(j, j_cur) * 2;
-      if (to_go < dist) {
-        if (j_cur < j) { coord.diff_j(to_go); return; }
-        coord.diff_j(-to_go); return;
-      }
-      coord.SetJ(j);
-      to_go -= dist;
-    }
-     switch (dir) {
-      case (Direction::Up):
-        if (i_cur > i || map.matrix[tile][0]) { coord.diff_i(-to_go); }
-        break;
-      case (Direction::Right):
-        if (j_cur < j || map.matrix[tile][1]) { coord.diff_j(to_go); }
-        break;
-      case (Direction::Down):
-        if (i_cur < i || map.matrix[tile][2]) { coord.diff_i(to_go); }
-        break;
-      case (Direction::Left):
-        if (j_cur > j || map.matrix[tile][3]) { coord.diff_j(-to_go); }
-        break;
-      case (Direction::None):
-        break;
-    }
+   switch (dir) {
+    case (Direction::Up):
+      if (i_cur > i || map.matrix[tile][0]) { coord.diff_i(-to_go); }
+      break;
+    case (Direction::Right):
+      if (j_cur < j || map.matrix[tile][1]) { coord.diff_j(to_go); }
+      break;
+    case (Direction::Down):
+      if (i_cur < i || map.matrix[tile][2]) { coord.diff_i(to_go); }
+      break;
+    case (Direction::Left):
+      if (j_cur > j || map.matrix[tile][3]) { coord.diff_j(-to_go); }
+      break;
+    case (Direction::None):
+      break;
   }
-};
-
-class Ghost: public Creature {
- public:
-  using Creature::coord;
-  size_t ticks_to_follow = 0;
-  Colours colour = Colours::Red;
-
-  void ThinkAboutLife(size_t i);
-};
-
-class Player: public Creature {
- public:
-  size_t coins = 0;
-  size_t score = 0;
-  size_t lifes = 3; // не обязательно
-  PlayerState state = PlayerState::usual;
-  size_t ticks_for_state = 0;
-
-  void CheckCollisions() {
-    using namespace GameInfo;
-    using namespace GameCoreConstants;
-    long long cur_i = coord.GetI();
-    long long cur_j = coord.GetJ();
-    for (size_t i = 0; i < ghosts.size(); ++i) {
-      long long a = ghosts[i].coord.GetI();
-      long long b = ghosts[i].coord.GetJ();
-      if ((a - cur_i) * (a - cur_i) + (b - cur_j) * (b - cur_j) <= collision) {
-        GameInfo::state = GameState::Caught;
-        return;
-      }
-    }
-  }
-};
+}
 
 void Ghost::ThinkAboutLife(size_t i) {
   using namespace GameInfo;
   if (mode == GameMode::Hard) {
     ghosts_int[i] = map.FollowIntention(coord.GetTile(), players[0].coord.GetTile());
+  }
+}
+
+void Player::CheckCollisions() {
+  using namespace GameInfo;
+  using namespace GameCoreConstants;
+  long long cur_i = coord.GetI();
+  long long cur_j = coord.GetJ();
+  for (size_t i = 0; i < ghosts.size(); ++i) {
+    long long a = ghosts[i].coord.GetI();
+    long long b = ghosts[i].coord.GetJ();
+    if ((a - cur_i) * (a - cur_i) + (b - cur_j) * (b - cur_j) <= collision) {
+      GameInfo::state = GameState::Caught;
+      return;
+    }
   }
 }
 
