@@ -40,7 +40,8 @@ void Game() {
   using namespace WindowSettings;
   using namespace GameInfo;
   using namespace GameCoreConstants;
-  GameState status = state;
+  GameState status = GameState::Running;
+  D(static_cast<int>(status));
   while (game_menu->window_id == 5 || game_menu->window_id == 6) {
     sf::Event event;
     game_menu->window->clear();
@@ -83,13 +84,13 @@ void Game() {
           GameInfo::players[0].coord.GetDisplayCoord();
       player.setPosition(offset_x - 15 + player_display_coords.first,
                          offset_y - 15 + player_display_coords.second);
-      if (players_int[0] == Direction::None || players_int[0] == Direction::Right) {
+      if (players[0].dir == Direction::None || players[0].dir == Direction::Right) {
         texture.loadFromFile("../sprites/player_right.png");
-      } else if (players_int[0] == Direction::Up) {
+      } else if (players[0].dir == Direction::Up) {
         texture.loadFromFile("../sprites/player_up.png");
-      } else if (players_int[0] == Direction::Down) {
+      } else if (players[0].dir == Direction::Down) {
         texture.loadFromFile("../sprites/player_down.png");
-      } else if (players_int[0] == Direction::Left) {
+      } else if (players[0].dir == Direction::Left) {
         texture.loadFromFile("../sprites/player_left.png");
       }
       player.setTexture(texture);
@@ -101,13 +102,13 @@ void Game() {
         sf::Texture texture;
         ghost.setPosition(offset_x - 15 + ghost_display_coords.first,
                           offset_y - 15 + ghost_display_coords.second);
-        if (ghosts_int[i] == Direction::None || ghosts_int[i] == Direction::Right) {
+        if (ghosts[i].dir == Direction::None || ghosts[i].dir == Direction::Right) {
           texture.loadFromFile("../sprites/ghost_right.png");
-        } else if (ghosts_int[i] == Direction::Up) {
+        } else if (ghosts[i].dir == Direction::Up) {
           texture.loadFromFile("../sprites/ghost_up.png");
-        } else if (ghosts_int[i] == Direction::Down) {
+        } else if (ghosts[i].dir == Direction::Down) {
           texture.loadFromFile("../sprites/ghost_down.png");
-        } else if (ghosts_int[i] == Direction::Left) {
+        } else if (ghosts[i].dir == Direction::Left) {
           texture.loadFromFile("../sprites/ghost_left.png");
         }
         ghost.setTexture(texture);
