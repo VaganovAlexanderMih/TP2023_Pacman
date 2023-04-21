@@ -5,11 +5,11 @@
 
 
 ## Table of Contents
-- [Installation and Quick Start]()
-  - [Installation]()
-  - [Quick Start]()
-- [Images of gameplay]()
-- [Contributors]()
+- [Installation and Quick Start](https://github.com/VaganovAlexanderMih/TP2023_Pacman/tree/dev/GameFolder#installation-and-quick-start)
+  - [Installation](https://github.com/VaganovAlexanderMih/TP2023_Pacman/tree/dev/GameFolder#installation)
+  - [Quick Start](https://github.com/VaganovAlexanderMih/TP2023_Pacman/tree/dev/GameFolder#quick-start)
+- [Images of gameplay](https://github.com/VaganovAlexanderMih/TP2023_Pacman/tree/dev/GameFolder#images-of-gameplay)
+- [Contributors](https://github.com/VaganovAlexanderMih/TP2023_Pacman/tree/dev/GameFolder#contributors)`
 
 
 ## Installation and Quick Start
