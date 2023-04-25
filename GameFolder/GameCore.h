@@ -6,7 +6,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include <time.h>
+#include <chrono>
 #include <set>
 #include <unordered_set>
 
