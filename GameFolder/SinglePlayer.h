@@ -26,7 +26,6 @@ void CheckTouches() {
 void Game() {
   GameMenu* game_menu = new GameMenu(GameSettings::options, "../sprites/wall.png", GameSettings::options_coords, GameSettings::options_sizes, 1, 5);
   using namespace GameInfo;
-  D(flag);
 
   if (!flag) {
     D("Initialising game");
@@ -47,7 +46,6 @@ void Game() {
     sf::Sprite player;
     sf::Texture texture;
     if (status == GameState::Running) {
-      D("I'm in Running!!!");
       GenNextFrame();
       game_menu->window->clear();
       double offset_x = static_cast<double>((wigth - tile_wight * map.jsize) / 2);

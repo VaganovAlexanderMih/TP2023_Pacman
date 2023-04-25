@@ -8,7 +8,6 @@
 int main() {
   bool GameplayModeWasChosen = false;
   flag = false;
-  std::cout << "NEW VERSION" << "\n";
   std::vector<std::vector<std::string>> options = {
       MainMenuConstants::options, ChoosingGameModeWindow::options,
       OptionsWindow::options, AboutWindow::options, GameSettings::options};
@@ -20,8 +19,9 @@ int main() {
       OptionsWindow::options_sizes, AboutWindow::options_sizes, GameSettings::options_sizes};
   while (true) {
     int next = 1;
+    GameMenu* main_menu;
     while (!GameplayModeWasChosen) {
-      GameMenu* main_menu = new GameMenu(options[next - 1], "../sprites/image.png",
+      main_menu = new GameMenu(options[next - 1], "../sprites/image.png",
                                         options_coords[next - 1],
                                         options_sizes[next - 1], 1, next);
       main_menu->run();
