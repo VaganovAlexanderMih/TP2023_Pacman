@@ -41,7 +41,6 @@ namespace GameCoreConstants {
 
 struct Tile {
   TileState state;
-  Tile(size_t x): state(TileState(x)) {}
 };
 
 struct Map {
@@ -114,6 +113,14 @@ struct Map {
     isize = tiles.size();
     jsize = tiles[0].size();
     GenMatrix();
+  }
+    
+  Map& operator=(const std::vector<std::vector<Tile>>& init) {
+    tiles = init;
+    isize = tiles.size();
+    jsize = tiles[0].size();
+    GenMatrix();
+    return *this;
   }
 };
 
@@ -318,9 +325,7 @@ void ResetPos() {
 void InitGame(const GameInitInfo& init) {
   using namespace GameInfo;
   using std::vector;
-  std::cout << "eraojkfhjerojfghesjlj" << std::endl;
   map = (init.init_map);
-  std::cout << ";sdlajfhjoasd;j" << std::endl;
   def_players.resize(init.init_players.size());
   for (size_t i = 0; i < def_players.size(); ++i) {
     def_players[i] = Coord::GetCoord(init.init_players[i]);
@@ -329,7 +334,6 @@ void InitGame(const GameInitInfo& init) {
   for (size_t i = 0; i < def_ghosts.size(); ++i) {
     def_ghosts[i] = Coord::GetCoord(init.init_ghosts[i]);
   }
-  std::cout << "Players and ghosts set" << std::endl;
   players = std::vector<Player>(init.init_players.size());
   ghosts = std::vector<Ghost>(init.init_ghosts.size());
   players_int = std::vector<Direction>(players.size(), Direction::None);
