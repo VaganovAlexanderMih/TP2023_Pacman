@@ -3,7 +3,7 @@
 // MADE BY ALEKSANDER VAGANOV, SIDLETSKIY PAVEL,    //
 // FOR TP PROJECT IN MIPT                           //
 //////////////////////////////////////////////////////
-#include "SinglePlayer.h"
+#include "SinglePlayer.cpp"
 
 int main() {
   bool GameplayModeWasChosen = false;

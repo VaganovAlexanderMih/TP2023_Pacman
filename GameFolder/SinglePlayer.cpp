@@ -1,8 +1,8 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "GameMenu.h"
-#include "GameCore.h"
-#include "Maps.h"
+#include "GameMenu.cpp"
+#include "GameCore.cpp"
+#include "Maps.cpp"
 
 bool flag = false;
 
@@ -32,6 +32,7 @@ void Game() {
     InitGame(map1);
     flag = true;
   }
+  
   // GameState status = GameState::Running; инициализация должна быть
   std::cout << "Entering Game" << std::endl;
   using namespace WindowSettings;

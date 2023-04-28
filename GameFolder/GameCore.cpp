@@ -6,6 +6,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <thread>
 #include <chrono>
 #include <set>
 #include <unordered_set>
@@ -317,7 +318,9 @@ void ResetPos() {
 void InitGame(const GameInitInfo& init) {
   using namespace GameInfo;
   using std::vector;
+  std::cout << "eraojkfhjerojfghesjlj" << std::endl;
   map = (init.init_map);
+  std::cout << ";sdlajfhjoasd;j" << std::endl;
   def_players.resize(init.init_players.size());
   for (size_t i = 0; i < def_players.size(); ++i) {
     def_players[i] = Coord::GetCoord(init.init_players[i]);
@@ -326,6 +329,7 @@ void InitGame(const GameInitInfo& init) {
   for (size_t i = 0; i < def_ghosts.size(); ++i) {
     def_ghosts[i] = Coord::GetCoord(init.init_ghosts[i]);
   }
+  std::cout << "Players and ghosts set" << std::endl;
   players = std::vector<Player>(init.init_players.size());
   ghosts = std::vector<Ghost>(init.init_ghosts.size());
   players_int = std::vector<Direction>(players.size(), Direction::None);
@@ -352,4 +356,5 @@ void GenNextFrame() {
       state = GameState::Running;
     }
   }
+  std::this_thread::sleep_for(std::chrono::milliseconds(20));
 }
