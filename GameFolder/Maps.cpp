@@ -8,7 +8,7 @@ GameInitInfo GettingMap() {
   vector<size_t> players;
   vector<size_t> ghosts;
   
-  std::fstream inp("Maps.txt");
+  std::ifstream inp("../Maps.txt");
   size_t isize, jsize, pl_n, gh_n;
   inp >> isize >> jsize;
   map.assign(isize, vector<Tile>(jsize));
