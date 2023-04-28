@@ -24,6 +24,13 @@ chmod +x run.sh
 ./run.sh
 ```
 
+If you want to get latest update, you have to run next command sequence:
+
+```
+chmod +x update.sh
+./update.sh
+```
+
 ### Quick Start
 - \(Optional) If you want to play on HardMode, then go to the "Settings" option
   and choose the "HardMode" option (If chosen, it'll be red, if not - green)
