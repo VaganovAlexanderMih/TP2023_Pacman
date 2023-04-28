@@ -293,6 +293,33 @@ void Player::CheckCollisions() {
       return;
     }
   }
+  size_t tile_number = coord.GetTile();
+  auto tile = Coord::GetCoord(tile_number);
+  long long a = tile.GetI();
+  long long b = tile.GetJ();
+  size_t tile_i = tile_number / map.isize;
+  size_t tile_j = tile_number % map.isize;
+  if (map.tiles[tile_i][tile_j].state != TileState::empty
+      && (a - cur_i) * (a - cur_i) + (b - cur_j) * (b - cur_j) <= collision) {
+    switch (map.tiles[tile_i][tile_j].state) {
+      case (TileState::dot):
+        score += 10;
+        break;
+      case (TileState::cherry):
+        score += 100;
+        break;
+      case (TileState::ulta):
+        score += 50;
+        break;
+      case (TileState::wall):
+        score -= 100000;
+        break;
+      case (TileState::empty):
+        score += 1;
+        break;
+    }
+    map.tiles[tile_i][tile_j] = {TileState::empty};
+  }
 }
 
 // not needed?
