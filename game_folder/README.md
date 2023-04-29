@@ -20,8 +20,8 @@
 git clone --branch dev git@github.com:VaganovAlexanderMih/TP2023_Pacman.git PacManGame
 cd PacManGame
 cd GameFolder
-chmod +x run.sh
-./run.sh
+chmod +x install.sh
+./install.sh
 ```
 
 ### Quick Start
