@@ -24,6 +24,12 @@ chmod +x install.sh
 ./install.sh
 ```
 
+If you want to launch the game, just run next command:
+
+```
+./run.sh
+```
+
 ### Quick Start
 - \(Optional) If you want to play on HardMode, then go to the "Settings" option
   and choose the "HardMode" option (If chosen, it'll be red, if not - green)

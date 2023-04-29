@@ -1,2 +1,2 @@
 #!/bin/bash
-docker run -it --net=host --device /dev/dri/ -e DISPLAY game_folder
+docker run -it --net=host --device /dev/dri/ -e DISPLAY game

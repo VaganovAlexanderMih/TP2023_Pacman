@@ -8,4 +8,4 @@ EXPOSE 8878
 
 RUN chmod +x project_builder.sh
 
-CMD ./broject_builder.sh
+CMD ./project_builder.sh
