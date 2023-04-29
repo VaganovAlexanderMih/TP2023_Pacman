@@ -21,10 +21,10 @@ void Game() {
   GameMenu* game_menu = new GameMenu(GameSettings::options, "../sprites/wall.png", GameSettings::options_coords, GameSettings::options_sizes, 1, 5);
   using namespace GameInfo;
 
-  if (!flag) {
+  if (!flag_continuing) {
     D("Initialising game");
     InitGame(map1);
-    flag = true;
+    flag_continuing = true;
   }
   
   // GameState status = GameState::Running; инициализация должна быть
@@ -34,6 +34,7 @@ void Game() {
   using namespace GameCoreConstants;
   GameState status = GameState::Running;
   D(static_cast<int>(status));
+  D(game_menu->window_id);
   while (game_menu->window_id == 5 || game_menu->window_id == 6) {
     sf::Event event;
     game_menu->window->clear();
@@ -122,8 +123,8 @@ void Game() {
         if (event.type == sf::Event::KeyPressed) {
           if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             game_menu->next_menu_id = 1;
-            flag = false;
-            D(flag);
+            flag_continuing = false;
+            D(flag_continuing);
           } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
             status = GameState::Running;
             break;
@@ -138,7 +139,7 @@ void Game() {
         if (event.type == sf::Event::KeyPressed) {
           if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             game_menu->next_menu_id = 1;
-            flag = false;
+            flag_continuing = false;
             break;
           } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
             status = GameState::Running;
@@ -153,7 +154,7 @@ void Game() {
         if (event.type == sf::Event::KeyPressed) {
           if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             game_menu->next_menu_id = 1;
-            flag = false;
+            flag_continuing = false;
             break;
           } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
             status = GameState::Running;

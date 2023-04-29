@@ -4,7 +4,7 @@
 #include "GameMenu.hpp"
 #include "Maps.hpp"
 
-inline bool flag = false;
+inline bool flag_continuing = false;
 
 void CheckTouches();
 
