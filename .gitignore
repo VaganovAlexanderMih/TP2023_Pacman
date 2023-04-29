@@ -1,4 +1,4 @@
-.vscode/*
-GameFolder/build
-GameFolder/.DS_Store
+.vscode
+game_folder/build
+game_folder/.DS_Store
 .DS_Store
