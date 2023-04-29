@@ -33,7 +33,7 @@ namespace AboutWindow {
 }
 
 namespace GameSettings {
-    bool hardmode_enabled = false;
+    inline bool hardmode_enabled = false;
     const std::vector<std::string> options = {"Pacman!"};
     const std::vector<sf::Vector2f> options_coords = {{680, 40}};
     const std::vector<double> options_sizes = {80};

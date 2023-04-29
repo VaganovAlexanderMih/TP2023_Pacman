@@ -7,6 +7,6 @@ set(CMAKE_C_COMPILER "gcc-4.2")
 
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
-add_executable(Pacman Game.cpp)
+add_executable(Pacman SinglePlayer.cpp GameMenu.cpp GameCore.cpp Maps.cpp Game.cpp)
 
 target_link_libraries(Pacman sfml-graphics sfml-audio)

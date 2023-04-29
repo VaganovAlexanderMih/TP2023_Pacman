@@ -3,186 +3,81 @@
 // MADE BY PAVEL SIDLETSKIY                            //
 // USED TO GENERATE NEW FRAMES AND CHECK CURRENT STATE //
 /////////////////////////////////////////////////////////
-#pragma once
-#include <iostream>
-#include <vector>
-#include <thread>
-#include <chrono>
-#include <set>
-#include <unordered_set>
+#include "GameCore.hpp"
 
-template <typename T>
-void D(T n) { std::cout << "DEB " << n << std::endl; }
+size_t Map::P(size_t i, size_t j) { return i * jsize + j; }
+size_t Map::C(size_t a, size_t n) {
+if (n == 0) { return a - jsize; }
+if (n == 1) { return a + 1; }
+if (n == 2) { return a + jsize; }
+if (n == 3) { return a - 1; }
+return 0;
+}
 
-enum class PlayerState {
-  usual, cherry
-};
-enum class GameMode {
-  Normal, Hard
-};
-enum class GameState {
-  Running, Paused, Win, Lose, Caught
-};
-enum class Colours {
-  Red, Blue, White, Yellow
-};
-enum class Direction {
-  None, Up, Right, Down, Left
-};
-enum class TileState {
-  wall, empty, dot, cherry, ulta
-};
+bool Map::FollowState::operator==(const FollowState& b) const {
+    return (pos == b.pos) && (InitialState == b.InitialState);
+}
 
-namespace GameCoreConstants {
-  const size_t tile_size = 33;  // need central pixel? Yes
-  const size_t def_speed = 2;
-  const size_t collision = 200;
-};
+bool Map::FollowState::operator<(const FollowState& b) const {
+    return pos < b.pos;
+}
 
-struct Tile {
-  TileState state;
-};
-
-struct Map {
-  size_t isize = 0;
-  size_t jsize = 0;
-  std::vector<std::vector<Tile>> tiles;
-  std::vector<std::vector<bool>> matrix;
-
-  size_t P(size_t i, size_t j) { return i * jsize + j; }
-  size_t C(size_t a, size_t n) {
-    if (n == 0) { return a - jsize; }
-    if (n == 1) { return a + 1; }
-    if (n == 2) { return a + jsize; }
-    if (n == 3) { return a - 1; }
-    return 0;
-  }
-
-  struct FollowState {
-    size_t pos;
-    Direction InitialState = Direction::None;
-    bool operator==(const FollowState& b) const {
-      return (pos == b.pos) && (InitialState == b.InitialState);
-    }
-    bool operator<(const FollowState& b) const {
-      return pos < b.pos;
-    }
-  };
-
-  Direction FollowIntention(size_t a, size_t b) {
-    if (a == b) { return Direction::Up; }
-    std::set<size_t> touched = {a};
-    std::set<FollowState> hist, act;
-    if (matrix[a][0]) { hist.insert({a - jsize, Direction::Up}); touched.insert(a - jsize); }
-    if (matrix[a][1]) { hist.insert({a + 1, Direction::Right}); touched.insert(a + 1); }
-    if (matrix[a][2]) { hist.insert({a + jsize, Direction::Down}); touched.insert(a + jsize); }
-    if (matrix[a][3]) { hist.insert({a - 1, Direction::Left}); touched.insert(a - 1); }
-    for (auto& i : hist) { if (i.pos == b) return i.InitialState; }
-    while (true) {
-      for (auto& i : hist) {
-        for (size_t j = 0; j < 4; ++j) {
-          size_t n = C(i.pos, j);
-          if (n == b) { return i.InitialState; }
-          if (matrix[i.pos][j] && (touched.count(n) == 0)) {
-            touched.insert(n);
-            act.insert({n, i.InitialState});
-          }
+Direction Map::FollowIntention(size_t a, size_t b) {
+if (a == b) { return Direction::Up; }
+std::set<size_t> touched = {a};
+std::set<FollowState> hist, act;
+if (matrix[a][0]) { hist.insert({a - jsize, Direction::Up}); touched.insert(a - jsize); }
+if (matrix[a][1]) { hist.insert({a + 1, Direction::Right}); touched.insert(a + 1); }
+if (matrix[a][2]) { hist.insert({a + jsize, Direction::Down}); touched.insert(a + jsize); }
+if (matrix[a][3]) { hist.insert({a - 1, Direction::Left}); touched.insert(a - 1); }
+for (auto& i : hist) { if (i.pos == b) return i.InitialState; }
+while (true) {
+    for (auto& i : hist) {
+    for (size_t j = 0; j < 4; ++j) {
+        size_t n = C(i.pos, j);
+        if (n == b) { return i.InitialState; }
+        if (matrix[i.pos][j] && (touched.count(n) == 0)) {
+        touched.insert(n);
+        act.insert({n, i.InitialState});
         }
-      }
-      hist.swap(act);
-      act.clear();
     }
-  }
+    }
+    hist.swap(act);
+    act.clear();
+}
+}
 
-  void GenMatrix() {
+void Map::GenMatrix() {
     matrix = std::vector<std::vector<bool>>(isize * jsize, std::vector<bool>(4, false));
     for (size_t i = 0; i < isize; ++i) {
-      for (size_t j = 0; j < jsize; ++j) {
+        for (size_t j = 0; j < jsize; ++j) {
         if (tiles[i][j].state == TileState::wall) { continue; }
         size_t c = P(i, j);
         if (i > 0) { matrix[c][0] = tiles[i - 1][j].state != TileState::wall; }
         if (j < jsize - 1) { matrix[c][1] = tiles[i][j + 1].state != TileState::wall; }
         if (i < isize - 1) { matrix[c][2] = tiles[i + 1][j].state != TileState::wall; }
         if (j > 0) { matrix[c][3] = tiles[i][j - 1].state != TileState::wall; }
-      }
+        }
     }
-  }
+}
 
-  Map() {}
-  Map(const std::vector<std::vector<Tile>>& init): tiles(init) {
+Map::Map() {}
+Map::Map(const std::vector<std::vector<Tile>>& init): tiles(init) {
     isize = tiles.size();
     jsize = tiles[0].size();
     GenMatrix();
-  }
+}
     
-  Map& operator=(const std::vector<std::vector<Tile>>& init) {
+Map& Map::operator=(const std::vector<std::vector<Tile>>& init) {
     tiles = init;
     isize = tiles.size();
     jsize = tiles[0].size();
     GenMatrix();
     return *this;
-  }
-};
+}
 
-struct Coord {
-  size_t coordinate = 0;
-
-  size_t GetTile() const;
-  static Coord GetCoord(size_t tile);
-  std::pair<size_t, size_t> GetDisplayCoord();
-
-  void diff_i(long long diff);
-  void diff_j(long long diff);
-
-  size_t GetI() const;
-  size_t GetJ() const;
-
-  void SetI(long long i) { diff_i(i - GetI()); }
-  void SetJ(long long j) { diff_j(j - GetJ()); }
-};
-class Creature {
- public:
-  Coord coord;
-  Direction dir = Direction::None;
-  size_t speed = GameCoreConstants::def_speed;
-
-  void GenNextStep(const Direction& new_dir);
-};
-class Ghost: public Creature {
- public:
-  using Creature::coord;
-  size_t ticks_to_follow = 0;
-  Colours colour = Colours::Red;
-
-  void ThinkAboutLife(size_t i);
-};
-class Player: public Creature {
- public:
-  size_t coins = 0;
-  size_t score = 0;
-  size_t lifes = 3; // не обязательно
-  PlayerState state = PlayerState::usual;
-  size_t ticks_for_state = 0;
-
-  void CheckCollisions();
-};
-namespace GameInfo {
-  Map map;
-  std::vector<Player> players;
-  std::vector<Ghost> ghosts;
-  std::vector<Coord> def_players;
-  std::vector<Coord> def_ghosts;
-  std::vector<Direction> players_int;
-  std::vector<Direction> ghosts_int;
-  GameMode mode;
-  GameState state;
-};
-
-struct GameInitInfo {
-  std::vector<std::vector<Tile>> init_map;
-  std::vector<size_t> init_players;
-  std::vector<size_t> init_ghosts;
-};
+void Coord::SetI(long long i) { diff_i(i - GetI()); }
+void Coord::SetJ(long long j) { diff_j(j - GetJ()); }
 
 size_t Coord::GetTile() const {
   using namespace GameInfo;

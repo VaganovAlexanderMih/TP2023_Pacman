@@ -1,10 +1,4 @@
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include "GameMenu.cpp"
-#include "GameCore.cpp"
-#include "Maps.cpp"
-
-bool flag = false;
+#include "SinglePlayer.hpp"
 
 void CheckTouches() {
   using namespace GameInfo;
@@ -115,6 +109,7 @@ void Game() {
       CheckTouches();
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
         status = GameState::Paused;
+        game_menu->window->close();
         break;
       }
       game_menu->window->display();
