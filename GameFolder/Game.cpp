@@ -29,9 +29,9 @@ int main() {
         return 0;
       }
       next = main_menu->next_menu_id;
-      GameplayModeWasChosen = (next == 5 || next == 6);
       main_menu->window->close();
       delete main_menu;
+      GameplayModeWasChosen = (next == 5 || next == 6);
       main_menu = nullptr;
     }
     if (next == 5) {
