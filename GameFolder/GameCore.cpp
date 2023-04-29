@@ -192,8 +192,8 @@ void Player::CheckCollisions() {
   auto tile = Coord::GetCoord(tile_number);
   long long a = tile.GetI();
   long long b = tile.GetJ();
-  size_t tile_i = tile_number / map.isize;
-  size_t tile_j = tile_number % map.isize;
+  size_t tile_i = tile_number / map.jsize;
+  size_t tile_j = tile_number % map.jsize;
   if (map.tiles[tile_i][tile_j].state != TileState::empty
       && (a - cur_i) * (a - cur_i) + (b - cur_j) * (b - cur_j) <= collision1) {
     switch (map.tiles[tile_i][tile_j].state) {
