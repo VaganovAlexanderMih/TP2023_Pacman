@@ -1,9 +1,11 @@
 FROM ubuntu:latest
 
-RUN apt-get update -y && apt-get install -y g++ libsfml-dev cmake
+RUN apt-get update -y && apt-get install -y g++ libsfml-dev cmake xauth
 
 COPY . .
 
-RUN chmod +x run.sh
+EXPOSE 8878
 
-RUN ./run.sh
+RUN chmod +x project_builder.sh
+
+CMD ./broject_builder.sh

@@ -1,8 +1,2 @@
 #!/bin/bash
-rm -rf build
-mkdir build
-cd build || exit
-cmake ../
-make
-chmod +x Pacman
-./Pacman
+docker run -it --net=host --device /dev/dri/ -e DISPLAY game_folder
