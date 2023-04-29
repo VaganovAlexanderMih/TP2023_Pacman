@@ -37,6 +37,7 @@ namespace GameCoreConstants {
   const size_t tile_size = 33;  // need central pixel? Yes
   const size_t def_speed = 2;
   const size_t collision = 200;
+  const size_t collision1 = 1000;
 };
 
 struct Tile {

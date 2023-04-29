@@ -195,7 +195,7 @@ void Player::CheckCollisions() {
   size_t tile_i = tile_number / map.isize;
   size_t tile_j = tile_number % map.isize;
   if (map.tiles[tile_i][tile_j].state != TileState::empty
-      && (a - cur_i) * (a - cur_i) + (b - cur_j) * (b - cur_j) <= collision) {
+      && (a - cur_i) * (a - cur_i) + (b - cur_j) * (b - cur_j) <= collision1) {
     switch (map.tiles[tile_i][tile_j].state) {
       case (TileState::dot):
         score += 10;
