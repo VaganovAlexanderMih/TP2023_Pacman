@@ -17,6 +17,11 @@ void CheckTouches() {
   }
 }
 
+namespace score_visualization {
+  inline const std::vector<sf::Vector2f> options_coords = {{100, 400}, {100, 500}};
+  inline const std::vector<double> options_sizes = {40, 40};
+}
+
 void Game() {
   GameMenu* game_menu = new GameMenu(GameSettings::options, "../sprites/wall.png", GameSettings::options_coords, GameSettings::options_sizes, 1, 5);
   using namespace GameInfo;
@@ -35,6 +40,8 @@ void Game() {
   GameState status = GameState::Running;
   D(static_cast<int>(status));
   D(game_menu->window_id);
+  std::vector<sf::Text> score_visual;
+  score_visual.resize(2);
   while (game_menu->window_id == 5 || game_menu->window_id == 6) {
     sf::Event event;
     game_menu->window->clear();
@@ -112,6 +119,17 @@ void Game() {
         status = GameState::Paused;
         game_menu->window->close();
         break;
+      }
+      for (int i = 0; i < 2; ++i) {
+        score_visual[i].setFont(*game_menu->font);
+        score_visual[i].setPosition(score_visualization::options_coords[i]);
+        if (i == 0) {
+          score_visual[0].setString("Score:");
+        } else {
+          score_visual[1].setString(std::to_string(GameInfo::players[0].score));
+        }
+        score_visual[i].setCharacterSize(score_visualization::options_sizes[i]);
+        game_menu->window->draw(score_visual[i]);
       }
       game_menu->window->display();
     } else if (status == GameState::Paused) {
