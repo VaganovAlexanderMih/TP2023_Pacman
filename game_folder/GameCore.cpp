@@ -184,7 +184,9 @@ void Player::CheckCollisions() {
     long long a = ghosts[i].coord.GetI();
     long long b = ghosts[i].coord.GetJ();
     if ((a - cur_i) * (a - cur_i) + (b - cur_j) * (b - cur_j) <= collision) {
-      GameInfo::state = GameState::Caught;
+      GameInfo::game_state = GameState::Caught;
+      D("CAUGHT");
+      D(static_cast<int>(GameInfo::game_state));
       return;
     }
   }
@@ -260,7 +262,7 @@ void InitGame(const GameInitInfo& init) {
   ghosts = std::vector<Ghost>(init.init_ghosts.size());
   players_int = std::vector<Direction>(players.size(), Direction::None);
   ghosts_int = std::vector<Direction>(ghosts.size(), Direction::Up);
-  state = GameState::Running;
+  game_state = GameState::Running;
   mode = GameMode::Hard;
   ResetPos();
 }
@@ -277,9 +279,9 @@ void GenNextFrame() {
   }
   for (size_t i = 0; i < players.size(); ++i) {
     players[i].CheckCollisions();
-    if (state == GameState::Caught) {
+    if (game_state == GameState::Caught) {
       ResetPos();
-      state = GameState::Running;
+      game_state = GameState::Running;
     }
   }
   std::this_thread::sleep_for(std::chrono::milliseconds(10));

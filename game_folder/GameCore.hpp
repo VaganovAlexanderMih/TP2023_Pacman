@@ -125,7 +125,7 @@ namespace GameInfo {
   inline std::vector<Direction> players_int;
   inline std::vector<Direction> ghosts_int;
   inline GameMode mode;
-  inline GameState state;
+  inline GameState game_state;
 };
 
 struct GameInitInfo {

@@ -6,7 +6,7 @@
 
 inline bool flag_continuing = false;
 
-std::string IntToStr(size_t number);
+inline bool end_of_the_game = false;
 
 void CheckTouches();
 

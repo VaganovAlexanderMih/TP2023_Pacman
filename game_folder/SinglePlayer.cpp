@@ -26,10 +26,11 @@ void Game() {
   GameMenu* game_menu = new GameMenu(GameSettings::options, "../sprites/wall.png", GameSettings::options_coords, GameSettings::options_sizes, 1, 5);
   using namespace GameInfo;
 
-  if (!flag_continuing) {
+  if (!flag_continuing || end_of_the_game) {
     D("Initialising game");
     InitGame(map1);
-    flag_continuing = true;
+    flag_continuing = true; // TODO diff between first and second variants
+    end_of_the_game = false;
   }
   
   // GameState status = GameState::Running; инициализация должна быть
@@ -42,13 +43,14 @@ void Game() {
   D(game_menu->window_id);
   std::vector<sf::Text> score_visual;
   score_visual.resize(2);
-  while (game_menu->window_id == 5 || game_menu->window_id == 6) {
+  while (game_menu->window_id == 5) {
     sf::Event event;
     game_menu->window->clear();
     sf::RectangleShape next_menu;
     sf::Sprite player;
     sf::Texture texture;
-    if (status == GameState::Running) {
+    status = GameInfo::game_state;
+    if (GameInfo::game_state == GameState::Running) {
       GenNextFrame();
       game_menu->window->clear();
       double offset_x = static_cast<double>((wigth - tile_wight * map.jsize) / 2);
@@ -132,6 +134,7 @@ void Game() {
         game_menu->window->draw(score_visual[i]);
       }
       game_menu->window->display();
+      D(static_cast<int>(status));
     } else if (status == GameState::Paused) {
       sf::Event event;
       next_menu.setSize(sf::Vector2f(1920, 1080));
@@ -149,7 +152,7 @@ void Game() {
           }
         }
       }
-    } else if (status == GameState::Win) {
+    } else if (GameInfo::game_state == GameState::Win) {
       next_menu.setSize(sf::Vector2f(1920, 1080));
       texture.loadFromFile("../sprites/win.png");
       //next_menu.setTexture(texture);
@@ -160,11 +163,11 @@ void Game() {
             flag_continuing = false;
             break;
           } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-            status = GameState::Running;
+            GameInfo::game_state = GameState::Running;
           }
         }
       }
-    } else if (status == GameState::Lose) {
+    } else if (GameInfo::game_state == GameState::Lose) {
       next_menu.setSize(sf::Vector2f(1920, 1080));
       texture.loadFromFile("../sprites/lose.png");
       //next_menu.setTexture(texture);
@@ -175,12 +178,13 @@ void Game() {
             flag_continuing = false;
             break;
           } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-            status = GameState::Running;
+            GameInfo::game_state = GameState::Running;
           }
         }
       }
-    } else if (status == GameState::Caught) {
-      // Caught animation
+    } else if (GameInfo::game_state == GameState::Caught) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+      GameInfo::game_state = GameState::Running;
     }
     if (event.type == sf::Event::KeyPressed) {
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
