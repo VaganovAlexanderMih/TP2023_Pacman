@@ -3,11 +3,11 @@
 // MADE BY ALEKSANDER VAGANOV, SIDLETSKIY PAVEL,    //
 // FOR TP PROJECT IN MIPT                           //
 //////////////////////////////////////////////////////
-#include "SinglePlayer.cpp"
+#include "SinglePlayer.hpp"
 
 int main() {
   bool GameplayModeWasChosen = false;
-  flag = false;
+  flag_continuing = false;
   std::vector<std::vector<std::string>> options = {
       MainMenuConstants::options, ChoosingGameModeWindow::options,
       OptionsWindow::options, AboutWindow::options, GameSettings::options};
@@ -29,8 +29,9 @@ int main() {
         return 0;
       }
       next = main_menu->next_menu_id;
-      GameplayModeWasChosen = (next == 5 || next == 6);
+      main_menu->window->close();
       delete main_menu;
+      GameplayModeWasChosen = (next == 5 || next == 6);
       main_menu = nullptr;
     }
     if (next == 5) {

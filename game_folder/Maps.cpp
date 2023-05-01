@@ -1,6 +1,4 @@
-#include <vector>
-#include "GameCore.cpp"
-#include <fstream>
+#include "Maps.hpp"
 
 GameInitInfo GettingMap() {
   using std::vector;
@@ -34,5 +32,3 @@ GameInitInfo GettingMap() {
   
   return {map, players, ghosts};
 }
-
-GameInitInfo map1 = GettingMap();

@@ -15,9 +15,9 @@ namespace MainMenuConstants {
 }
 
 namespace ChoosingGameModeWindow {
-    const std::vector<std::string> options = {"Pacman!", "SinglePlayer", "MultiPlayer"};
-    const std::vector<sf::Vector2f> options_coords = {{680, 40}, {200, 700}, {1200, 700}};
-    const std::vector<double> options_sizes = {80, 50, 50};
+    const std::vector<std::string> options = {"Pacman!", "SinglePlayer"};
+    const std::vector<sf::Vector2f> options_coords = {{680, 40}, {200, 700}};
+    const std::vector<double> options_sizes = {80, 50};
 }
 
 namespace OptionsWindow {
@@ -33,7 +33,7 @@ namespace AboutWindow {
 }
 
 namespace GameSettings {
-    bool hardmode_enabled = false;
+    inline bool hardmode_enabled = false;
     const std::vector<std::string> options = {"Pacman!"};
     const std::vector<sf::Vector2f> options_coords = {{680, 40}};
     const std::vector<double> options_sizes = {80};

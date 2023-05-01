@@ -20,15 +20,14 @@
 git clone --branch dev git@github.com:VaganovAlexanderMih/TP2023_Pacman.git PacManGame
 cd PacManGame
 cd GameFolder
-chmod +x run.sh
+chmod +x install.sh
+./install.sh
+```
+
+If you want to launch the game, just run next command:
+
+```
 ./run.sh
-```
-
-If you want to get latest update, you have to run next command sequence:
-
-```
-chmod +x update.sh
-./update.sh
 ```
 
 ### Quick Start
@@ -45,19 +44,19 @@ chmod +x update.sh
 
 Main menu:
 
-![Main Menu](GameFolder/images/main_menu.png)
+![Main Menu](game_folder/images/main_menu.png)
 
 Hardmode option:
 
-![Hardmode option](GameFolder/images/hardmode_option.png)
+![Hardmode option](game_folder/images/hardmode_option.png)
 
 Gameplay choose:
 
-![Gameplay choose](GameFolder/images/gameplay_choose.png)
+![Gameplay choose](game_folder/images/gameplay_choose.png)
 
 Game:
 
-![Game](GameFolder/images/game.png)
+![Game](game_folder/images/game.png)
 
 
 ## Contributors:
