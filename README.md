@@ -45,19 +45,19 @@ chmod +x update.sh
 
 Main menu:
 
-![Main Menu](GameFolder/images/main_menu.png)
+![Main Menu](game_folder/images/main_menu.png)
 
 Hardmode option:
 
-![Hardmode option](GameFolder/images/hardmode_option.png)
+![Hardmode option](game_folder/images/hardmode_option.png)
 
 Gameplay choose:
 
-![Gameplay choose](GameFolder/images/gameplay_choose.png)
+![Gameplay choose](game_folder/images/gameplay_choose.png)
 
 Game:
 
-![Game](GameFolder/images/game.png)
+![Game](game_folder/images/game.png)
 
 
 ## Contributors:
