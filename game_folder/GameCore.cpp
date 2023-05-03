@@ -65,6 +65,13 @@ Map::Map() {}
 Map::Map(const std::vector<std::vector<Tile>>& init): tiles(init) {
     isize = tiles.size();
     jsize = tiles[0].size();
+    for (size_t i = 0; i < isize; ++i) {
+      for (size_t j = 0; j < jsize; ++j) {
+        if (tiles[i][j].state != TileState::wall && tiles[i][j].state != TileState::empty) {
+          ++coins;
+        }
+      }
+  }
     GenMatrix();
 }
     
@@ -186,6 +193,11 @@ void Player::CheckCollisions() {
     if ((a - cur_i) * (a - cur_i) + (b - cur_j) * (b - cur_j) <= collision) {
       GameInfo::game_state = GameState::Caught;
       D("CAUGHT");
+      if (lifes == 0) {
+        GameInfo::game_state = GameState::Lose;
+        return;
+      }
+      --lifes;
       D(static_cast<int>(GameInfo::game_state));
       return;
     }
@@ -201,12 +213,15 @@ void Player::CheckCollisions() {
     switch (map.tiles[tile_i][tile_j].state) {
       case (TileState::dot):
         score += 10;
+        --map.coins;
         break;
       case (TileState::cherry):
         score += 100;
+        --map.coins;
         break;
       case (TileState::ulta):
         score += 50;
+        --map.coins;
         break;
       case (TileState::wall):
         score -= 100000;
@@ -216,6 +231,10 @@ void Player::CheckCollisions() {
         break;
     }
     map.tiles[tile_i][tile_j] = {TileState::empty};
+    if (map.coins == 0) {
+      GameInfo::game_state = GameState::Win;
+      return;
+    }
   }
 }
 
