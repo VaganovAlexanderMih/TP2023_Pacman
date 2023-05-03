@@ -47,6 +47,7 @@ struct Tile {
 struct Map {
   size_t isize = 0;
   size_t jsize = 0;
+  size_t coins = 0;
   std::vector<std::vector<Tile>> tiles;
   std::vector<std::vector<bool>> matrix;
 

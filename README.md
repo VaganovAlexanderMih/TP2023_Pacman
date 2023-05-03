@@ -20,15 +20,14 @@
 git clone --branch dev git@github.com:VaganovAlexanderMih/TP2023_Pacman.git PacManGame
 cd PacManGame
 cd GameFolder
-chmod +x run.sh
+chmod +x install.sh
+./install.sh
+```
+
+If you want to launch the game, just run next command:
+
+```
 ./run.sh
-```
-
-If you want to get latest update, you have to run next command sequence:
-
-```
-chmod +x update.sh
-./update.sh
 ```
 
 ### Quick Start
