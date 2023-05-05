@@ -21,7 +21,7 @@ enum class GameMode {
   Normal, Hard
 };
 enum class GameState {
-  Running, Paused, Win, Lose, Caught
+  Running, Paused, Win, Lose, Caught, End
 };
 enum class Colours {
   Red, Blue, White, Yellow
@@ -110,7 +110,7 @@ class Player: public Creature {
  public:
   size_t coins = 0;
   size_t score = 0;
-  size_t lifes = 3; // не обязательно
+  size_t lifes = 0; // не обязательно
   PlayerState state = PlayerState::usual;
   size_t ticks_for_state = 0;
 

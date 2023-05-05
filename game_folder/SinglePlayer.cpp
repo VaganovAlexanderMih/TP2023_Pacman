@@ -115,6 +115,9 @@ void Paused(GameMenu* game_menu, GameState& status, sf::Texture& texture, sf::Re
   sf::Event event;
   next_menu.setSize(sf::Vector2f(1920, 1080));
   texture.loadFromFile("../sprites/paused.png");
+  next_menu.setTexture(&texture);
+  game_menu->window->draw(next_menu);
+  game_menu->window->display();
   //next_menu.setTexture(texture);
   while (status == GameState::Paused) {
     if (event.type == sf::Event::KeyPressed) {
@@ -152,16 +155,19 @@ void Lose(GameMenu* game_menu, GameState& status, sf::Texture& texture, sf::Rect
   sf::Event event;
   next_menu.setSize(sf::Vector2f(1920, 1080));
   texture.loadFromFile("../sprites/lose.png");
+  next_menu.setTexture(&texture);
   //next_menu.setTexture(texture);
-  while (status == GameState::Win) {
-    if (event.type == sf::Event::KeyPressed) {
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-        game_menu->next_menu_id = 1;
-        flag_continuing = false;
-        break;
-      } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
-        GameInfo::game_state = GameState::Running;
-      }
+  while (status == GameState::Lose) {
+    game_menu->window->clear();
+    game_menu->window->draw(next_menu);
+    game_menu->window->display();
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+      GameInfo::game_state = GameState::End;
+      game_menu->next_menu_id = 1;
+      flag_continuing = false;
+      break;
+    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
+      GameInfo::game_state = GameState::Running;
     }
   }
 }
@@ -194,19 +200,18 @@ void Game() {
     sf::Sprite player;
     sf::Texture texture;
     status = GameInfo::game_state;
-    if (GameInfo::game_state == GameState::Running) {
+    if (status == GameState::Running) {
       Running(game_menu, texture, score_visual, status, player);
     } else if (status == GameState::Paused) {
       Paused(game_menu, status, texture, next_menu);
-    } else if (GameInfo::game_state == GameState::Win) {
+    } else if (status == GameState::Win) {
       Win(game_menu, status, texture, next_menu);
-    } else if (GameInfo::game_state == GameState::Lose) {
+    } else if (status == GameState::Lose) {
       Lose(game_menu, status, texture, next_menu);
-    } else if (GameInfo::game_state == GameState::Caught) {
-      std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+    } else if (status == GameState::Caught) {
       GameInfo::game_state = GameState::Running;
     }
-    if (event.type == sf::Event::KeyPressed) {
+    if (event.type == sf::Event::KeyPressed || status == GameState::End) {
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
         status = GameState::Paused;
       }
