@@ -1,0 +1,5 @@
+if(EXISTS "/home/ctz/Desktop/PacManGame/game_folder/build/Tests[1]_tests.cmake")
+  include("/home/ctz/Desktop/PacManGame/game_folder/build/Tests[1]_tests.cmake")
+else()
+  add_test(Tests_NOT_BUILT Tests_NOT_BUILT)
+endif()

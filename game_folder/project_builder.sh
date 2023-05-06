@@ -5,4 +5,5 @@ cd build || exit
 cmake ../
 make
 chmod +x Pacman
+chmod +x Tests
 ./Pacman

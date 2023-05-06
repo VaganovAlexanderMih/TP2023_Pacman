@@ -18,6 +18,4 @@ void Win(GameMenu* game_menu, GameState& status, sf::Texture& texture, sf::Recta
 
 void Lose(GameMenu* game_menu, GameState& status, sf::Texture& texture, sf::RectangleShape& next_menu);
 
-void Caught();
-
 void Game();
