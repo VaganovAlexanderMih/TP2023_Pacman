@@ -1,5 +1,0 @@
-add_test([=[GameInitTests.InitInfoTest]=]  /home/ctz/Desktop/PacManGame/game_folder/build/Tests [==[--gtest_filter=GameInitTests.InitInfoTest]==] --gtest_also_run_disabled_tests)
-set_tests_properties([=[GameInitTests.InitInfoTest]=]  PROPERTIES WORKING_DIRECTORY /home/ctz/Desktop/PacManGame/game_folder/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-add_test([=[RequirentmentFilesExist.FilesExistTest]=]  /home/ctz/Desktop/PacManGame/game_folder/build/Tests [==[--gtest_filter=RequirentmentFilesExist.FilesExistTest]==] --gtest_also_run_disabled_tests)
-set_tests_properties([=[RequirentmentFilesExist.FilesExistTest]=]  PROPERTIES WORKING_DIRECTORY /home/ctz/Desktop/PacManGame/game_folder/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-set(  Tests_TESTS GameInitTests.InitInfoTest RequirentmentFilesExist.FilesExistTest)

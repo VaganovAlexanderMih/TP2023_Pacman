@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/Tests.dir/Tests.cpp.o CMakeFiles/Tests.dir/GameCore.cpp.o CMakeFiles/Tests.dir/Maps.cpp.o -o Tests  lib/libgtest_main.a lib/libgtest.a 
