@@ -5,6 +5,7 @@ on:
       - '*'
     push:
       - main
+      - dev
 
 jobs:
   build:
