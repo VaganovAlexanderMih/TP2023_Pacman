@@ -44,19 +44,19 @@ If you want to launch the game, just run next command:
 
 Main menu:
 
-![Main Menu](game_folder/images/main_menu.png)
+![Main Menu](images/main_menu.png)
 
 Hardmode option:
 
-![Hardmode option](game_folder/images/hardmode_option.png)
+![Hardmode option](images/hardmode_option.png)
 
 Gameplay choose:
 
-![Gameplay choose](game_folder/images/gameplay_choose.png)
+![Gameplay choose](images/gameplay_choose.png)
 
 Game:
 
-![Game](game_folder/images/game.png)
+![Game](images/game.png)
 
 
 ## Contributors:
