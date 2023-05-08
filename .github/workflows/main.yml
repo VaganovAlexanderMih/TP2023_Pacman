@@ -1,40 +1,21 @@
-name: Run Test
+name: Testing
+
 on:
   pull_request:
-    branches:
-      - '*'
-    push:
-      - main
-      - dev
+    branches: [ "main" ]
+  push: 
+    branches: [ "*" ]
+
+permissions: write-all
 
 jobs:
-  build:
+  MainTests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: build
-        uses: actions/setup-c++@v1
-        with:
-          c++-version: 20
+      - name: Prepare System
+        run: sudo apt-get install -y cmake libgtest-dev g++ libsfml-dev
       - name: Build
-        run: install.sh
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-without-markdown
-          path: |
-            dist
-            !dist/**/*.md
-  run:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v3
-      - name: Run
-        run: run.sh
-  
-  tests:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Running Tests
-        run: build/Tests
+        run: ./install.sh
+      - name: Tests
+        run: mkdir build && cd build && cmake .. && make && chmod +x Tests && ./Tests
