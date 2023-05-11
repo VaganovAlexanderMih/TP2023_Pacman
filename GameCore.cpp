@@ -7,44 +7,44 @@
 
 size_t Map::P(size_t i, size_t j) { return i * jsize + j; }
 size_t Map::C(size_t a, size_t n) {
-if (n == 0) { return a - jsize; }
-if (n == 1) { return a + 1; }
-if (n == 2) { return a + jsize; }
-if (n == 3) { return a - 1; }
-return 0;
+  if (n == 0) { return a - jsize; }
+  if (n == 1) { return a + 1; }
+  if (n == 2) { return a + jsize; }
+  if (n == 3) { return a - 1; }
+  return 0;
 }
 
 bool Map::FollowState::operator==(const FollowState& b) const {
-    return (pos == b.pos) && (InitialState == b.InitialState);
+  return (pos == b.pos) && (InitialState == b.InitialState);
 }
 
 bool Map::FollowState::operator<(const FollowState& b) const {
-    return pos < b.pos;
+  return pos < b.pos;
 }
 
 Direction Map::FollowIntention(size_t a, size_t b) {
-if (a == b) { return Direction::Up; }
-std::set<size_t> touched = {a};
-std::set<FollowState> hist, act;
-if (matrix[a][0]) { hist.insert({a - jsize, Direction::Up}); touched.insert(a - jsize); }
-if (matrix[a][1]) { hist.insert({a + 1, Direction::Right}); touched.insert(a + 1); }
-if (matrix[a][2]) { hist.insert({a + jsize, Direction::Down}); touched.insert(a + jsize); }
-if (matrix[a][3]) { hist.insert({a - 1, Direction::Left}); touched.insert(a - 1); }
-for (auto& i : hist) { if (i.pos == b) return i.InitialState; }
-while (true) {
-    for (auto& i : hist) {
-    for (size_t j = 0; j < 4; ++j) {
-        size_t n = C(i.pos, j);
-        if (n == b) { return i.InitialState; }
-        if (matrix[i.pos][j] && (touched.count(n) == 0)) {
-        touched.insert(n);
-        act.insert({n, i.InitialState});
-        }
-    }
-    }
-    hist.swap(act);
-    act.clear();
-}
+  if (a == b) { return Direction::Up; }
+  std::set<size_t> touched = {a};
+  std::set<FollowState> hist, act;
+  if (matrix[a][0]) { hist.insert({a - jsize, Direction::Up}); touched.insert(a - jsize); }
+  if (matrix[a][1]) { hist.insert({a + 1, Direction::Right}); touched.insert(a + 1); }
+  if (matrix[a][2]) { hist.insert({a + jsize, Direction::Down}); touched.insert(a + jsize); }
+  if (matrix[a][3]) { hist.insert({a - 1, Direction::Left}); touched.insert(a - 1); }
+  for (auto& i : hist) { if (i.pos == b) return i.InitialState; }
+  while (true) {
+      for (auto& i : hist) {
+      for (size_t j = 0; j < 4; ++j) {
+          size_t n = C(i.pos, j);
+          if (n == b) { return i.InitialState; }
+          if (matrix[i.pos][j] && (touched.count(n) == 0)) {
+          touched.insert(n);
+          act.insert({n, i.InitialState});
+          }
+      }
+      }
+      hist.swap(act);
+      act.clear();
+  }
 }
 
 void Map::GenMatrix() {
@@ -192,13 +192,11 @@ void Player::CheckCollisions() {
     long long b = ghosts[i].coord.GetJ();
     if ((a - cur_i) * (a - cur_i) + (b - cur_j) * (b - cur_j) <= collision) {
       GameInfo::game_state = GameState::Caught;
-      D("CAUGHT");
       if (lifes == 0) {
         GameInfo::game_state = GameState::Lose;
         return;
       }
       --lifes;
-      D(static_cast<int>(GameInfo::game_state));
       return;
     }
   }
@@ -234,18 +232,6 @@ void Player::CheckCollisions() {
     if (map.coins == 0) {
       GameInfo::game_state = GameState::Win;
       return;
-    }
-  }
-}
-
-// not needed?
-size_t FindFreePosition() {
-  return 0;
-  using namespace GameInfo;
-  while (true) {
-    size_t ans = rand();
-    for (auto& i : players) {
-      continue;
     }
   }
 }

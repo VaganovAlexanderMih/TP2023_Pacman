@@ -11,9 +11,6 @@
 #include <set>
 #include <unordered_set>
 
-template <typename T>
-void D(T n) { std::cout << "DEB " << n << std::endl; }
-
 enum class PlayerState {
   usual, cherry
 };

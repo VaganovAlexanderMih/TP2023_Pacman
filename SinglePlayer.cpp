@@ -124,7 +124,6 @@ void Paused(GameMenu* game_menu, GameState& status, sf::Texture& texture, sf::Re
       if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
         game_menu->next_menu_id = 1;
         flag_continuing = false;
-        D(flag_continuing);
       } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {
         status = GameState::Running;
         break;
@@ -156,7 +155,6 @@ void Lose(GameMenu* game_menu, GameState& status, sf::Texture& texture, sf::Rect
   next_menu.setSize(sf::Vector2f(1920, 1080));
   texture.loadFromFile("../sprites/lose.png");
   next_menu.setTexture(&texture);
-  //next_menu.setTexture(texture);
   while (status == GameState::Lose) {
     game_menu->window->clear();
     game_menu->window->draw(next_menu);
@@ -177,7 +175,6 @@ void Game() {
   using namespace GameInfo;
 
   if (!flag_continuing || end_of_the_game) {
-    D("Initialising game");
     InitGame(map1);
     flag_continuing = true; // TODO diff between first and second variants
     end_of_the_game = false;
@@ -189,8 +186,6 @@ void Game() {
   using namespace GameInfo;
   using namespace GameCoreConstants;
   GameState status = GameState::Running;
-  D(static_cast<int>(status));
-  D(game_menu->window_id);
   std::vector<sf::Text> score_visual;
   score_visual.resize(2);
   while (game_menu->window_id == 5) {
