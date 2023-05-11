@@ -48,8 +48,8 @@ struct Map {
   std::vector<std::vector<Tile>> tiles;
   std::vector<std::vector<bool>> matrix;
 
-  size_t P(size_t i, size_t j);
-  size_t C(size_t a, size_t n);
+  size_t Position(size_t i, size_t j);
+  size_t MoveByOneTyle(size_t a, size_t n);
 
   struct FollowState {
     size_t pos;

@@ -5,8 +5,8 @@
 /////////////////////////////////////////////////////////
 #include "GameCore.hpp"
 
-size_t Map::P(size_t i, size_t j) { return i * jsize + j; }
-size_t Map::C(size_t a, size_t n) {
+size_t Map::Position(size_t i, size_t j) { return i * jsize + j; }
+size_t Map::MoveByOneTyle(size_t a, size_t n) {
   if (n == 0) { return a - jsize; }
   if (n == 1) { return a + 1; }
   if (n == 2) { return a + jsize; }
@@ -34,7 +34,7 @@ Direction Map::FollowIntention(size_t a, size_t b) {
   while (true) {
       for (auto& i : hist) {
       for (size_t j = 0; j < 4; ++j) {
-          size_t n = C(i.pos, j);
+          size_t n = MoveByOneTyle(i.pos, j);
           if (n == b) { return i.InitialState; }
           if (matrix[i.pos][j] && (touched.count(n) == 0)) {
           touched.insert(n);
@@ -52,7 +52,7 @@ void Map::GenMatrix() {
     for (size_t i = 0; i < isize; ++i) {
         for (size_t j = 0; j < jsize; ++j) {
         if (tiles[i][j].state == TileState::wall) { continue; }
-        size_t c = P(i, j);
+        size_t c = Position(i, j);
         if (i > 0) { matrix[c][0] = tiles[i - 1][j].state != TileState::wall; }
         if (j < jsize - 1) { matrix[c][1] = tiles[i][j + 1].state != TileState::wall; }
         if (i < isize - 1) { matrix[c][2] = tiles[i + 1][j].state != TileState::wall; }
