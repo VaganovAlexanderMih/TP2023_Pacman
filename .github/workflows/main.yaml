@@ -1,0 +1,21 @@
+name: Testing
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push: 
+    branches: [ "*" ]
+
+permissions: write-all
+
+jobs:
+  MainTests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Prepare System
+        run: sudo apt-get install -y cmake libgtest-dev g++ libsfml-dev
+      - name: Build
+        run: ./install.sh
+      - name: Tests
+        run: mkdir build && cd build && cmake .. && make && chmod +x Tests && ./Tests
